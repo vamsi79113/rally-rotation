@@ -1896,8 +1896,14 @@
     pointsPerMatch = state.pointsPerMatch || 21; gameCounter = state.gameCounter || 0;
     players = state.players || []; rounds = state.rounds || [];
     currentBucketShown = state.currentBucketShown || 0; slotsPerSession = state.slotsPerSession || 1;
-    sessionBuckets = chunk(rounds, slotsPerSession);
-    finalRound = state.finalRound || null; finalStandingsSnapshot = state.finalStandingsSnapshot || null;
+    // Exclude the Final (if one has been played) from the regular round-by-round
+    // display — it's rendered separately below. Without this filter, restoring
+    // shared state would duplicate it as a normal match AND disconnect the two
+    // copies from each other (since JSON round-tripping breaks object identity).
+    sessionBuckets = chunk(rounds.filter(r=>!r.isFinal), slotsPerSession);
+    const restoredFinalRound = rounds.find(r=>r.isFinal) || null;
+    finalRound = restoredFinalRound || state.finalRound || null;
+    finalStandingsSnapshot = state.finalStandingsSnapshot || null;
 
     tSport = state.tSport || 'badminton'; tFormat = state.tFormat || 'doubles'; tSkill = state.tSkill || 'beginner';
     tPlayerNames = state.tPlayerNames || tPlayerNames; tPlayerGenders = state.tPlayerGenders || {};
@@ -1917,6 +1923,7 @@
     if (currentView === 'mixSchedule'){
       scheduleView.hidden = false; endSessionBtn.hidden = false; statsStrip.hidden = false;
       renderStatsStrip(); renderSchedule();
+      if (finalRound){ finalSectionEl.hidden = false; renderFinalSection(); playFinalBtn.disabled = true; playFinalBtn.textContent = '🏆 Final scheduled below'; }
     } else if (currentView === 'mixStandings'){
       endSession();
     } else if (currentView === 'tGroups'){
