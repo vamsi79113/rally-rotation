@@ -1,0 +1,2012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rally Rotation — Badminton Mix &amp; Match</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F2F5EF;
+    --ink:#14261C;
+    --court:#1B5E3A;
+    --court-dark:#123F27;
+    --court-line:#EAF3EC;
+    --amber:#E8A33D;
+    --amber-dark:#C9852A;
+    --teal:#2F9E7A;
+    --muted:#5B6B62;
+    --card:#FFFFFF;
+    --danger:#C1443B;
+    --border:#DCE5DA;
+    --shadow: 0 1px 2px rgba(20,38,28,0.06), 0 6px 20px rgba(20,38,28,0.06);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    line-height:1.5;
+    padding:0 0 80px;
+  }
+  h1,h2,h3,.display{
+    font-family:'Teko',sans-serif;
+    font-weight:600;
+    letter-spacing:0.02em;
+    line-height:1;
+    margin:0;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 20px;}
+
+  /* Topbar */
+  .topbar{
+    background:var(--court);
+    background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.035) 0 2px, transparent 2px 64px);
+    color:#fff;
+    padding:22px 0;
+    border-bottom:4px solid var(--court-dark);
+    position:relative;
+  }
+  .topbar-inner{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    flex-wrap:wrap;
+  }
+  .brand{display:flex;align-items:baseline;gap:10px;}
+  .brand .display{font-size:38px;color:#fff;}
+  .brand .tag{font-size:13px;color:rgba(255,255,255,0.75);font-weight:500;}
+  .end-btn{
+    background:rgba(255,255,255,0.12);
+    border:1.5px solid rgba(255,255,255,0.5);
+    color:#fff;
+    padding:9px 18px;
+    border-radius:100px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    transition:background .15s ease;
+  }
+  .end-btn:hover{background:rgba(255,255,255,0.22);}
+  .end-btn[hidden]{display:none;}
+
+  .stats-strip{
+    display:flex; gap:22px; flex-wrap:wrap; margin-top:14px;
+    font-size:14px; color:rgba(255,255,255,0.85);
+  }
+  .stats-strip b{color:#fff; font-weight:700;}
+
+  main{padding-top:32px;}
+
+  /* Setup card */
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:28px;
+    margin-bottom:24px;
+  }
+  .setup-head{margin-bottom:22px;}
+  .setup-head h2{font-size:30px;color:var(--court);}
+  .setup-head p{margin:6px 0 0;color:var(--muted);font-size:15px;max-width:60ch;}
+
+  .field-row{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:22px;}
+  .field{flex:1 1 180px;min-width:150px;}
+  .field label{
+    display:block;font-size:13px;font-weight:600;color:var(--muted);
+    margin-bottom:6px;
+  }
+  .field input[type=number], .field select{
+    width:100%;padding:10px 12px;border:1.5px solid var(--border);
+    border-radius:8px;font-size:15px;font-family:inherit;color:var(--ink);
+    background:#fff;
+  }
+  .field input:focus, .field select:focus{outline:2px solid var(--teal);outline-offset:1px;}
+  .field .hint{font-size:12px;color:var(--muted);margin-top:5px;}
+
+  .format-toggle{display:flex;gap:10px;}
+  .format-opt{
+    flex:1;border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;
+    cursor:pointer;text-align:center;font-weight:600;font-size:14px;color:var(--muted);
+    background:#fff;transition:all .12s ease;
+  }
+  .format-opt.active{border-color:var(--court);background:var(--court);color:#fff;}
+  .format-opt.disabled{opacity:0.4;cursor:not-allowed;}
+
+  .mode-tabs{display:flex;gap:8px;margin:24px 0 20px;border-bottom:2px solid var(--border);}
+  .mode-tab{
+    padding:10px 18px;font-weight:700;font-size:15px;color:var(--muted);
+    cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;
+  }
+  .mode-tab.active{color:var(--court);border-bottom-color:var(--amber);}
+
+  .group-block{margin-bottom:22px;}
+  .group-header{
+    display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+    padding:14px 18px;background:var(--court);color:#fff;border-radius:12px 12px 0 0;
+    flex-wrap:wrap;
+  }
+  .group-body{
+    border:1px solid var(--border);border-top:none;border-radius:0 0 12px 12px;
+    padding:16px;background:var(--card);
+  }
+  .group-standings{margin-bottom:18px;}
+  .bracket-round{margin-bottom:28px;}
+  .bracket-round h3{font-size:24px;color:var(--court);margin-bottom:12px;}
+  .champion-banner{
+    background:linear-gradient(90deg, #FCF1DE, #EAF6F0);border:2px solid var(--amber);
+    border-radius:12px;padding:22px;text-align:center;margin-bottom:22px;
+  }
+  .champion-banner .display{font-size:30px;color:var(--court);}
+  .champion-banner .names{font-size:22px;font-weight:800;margin-top:6px;color:var(--ink);}
+  .gender-toggle{display:flex;gap:4px;margin-top:6px;}
+  .gender-btn{
+    flex:1;text-align:center;padding:4px 0;border-radius:6px;font-size:11px;font-weight:700;
+    border:1px solid var(--border);cursor:pointer;color:var(--muted);
+  }
+  .gender-btn.active-m{background:#DCEBFA;border-color:#8FB8E0;color:#2A5A8A;}
+  .gender-btn.active-f{background:#FBE3EE;border-color:#E29BC0;color:#9A3D6C;}
+
+  .names-section{margin-top:6px;}
+  .names-section > label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:10px;}
+  .names-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;
+  }
+  .name-field{
+    display:flex;align-items:center;gap:8px;
+    border:1.5px solid var(--border);border-radius:8px;padding:6px 8px;background:#fbfcfa;
+  }
+  .name-num{
+    flex:none;width:22px;height:22px;border-radius:50%;background:var(--amber);color:#fff;
+    font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  }
+  .name-field input{
+    border:none;background:transparent;font-size:14px;font-family:inherit;width:100%;color:var(--ink);
+  }
+  .name-field input:focus{outline:none;}
+
+  .computed-line{
+    margin-top:6px;font-size:13px;color:var(--teal);font-weight:600;
+  }
+
+  .primary-btn{
+    background:var(--amber);color:#fff;border:none;border-radius:10px;
+    padding:14px 26px;font-size:16px;font-weight:700;font-family:'Inter',sans-serif;
+    cursor:pointer;transition:background .15s ease;
+  }
+  .primary-btn:hover{background:var(--amber-dark);}
+  .secondary-btn{
+    background:transparent;color:var(--court);border:1.5px solid var(--court);border-radius:10px;
+    padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;
+  }
+  .secondary-btn:hover{background:rgba(27,94,58,0.06);}
+  .error-msg{
+    background:#FBEAE8;color:var(--danger);border:1px solid #F1C7C2;border-radius:8px;
+    padding:12px 14px;font-size:14px;font-weight:600;margin-bottom:18px;
+  }
+  .error-msg[hidden]{display:none;}
+
+  /* Round sections */
+  .round-block{margin-bottom:22px;}
+  .round-header{
+    display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+    cursor:pointer;padding:14px 18px;background:var(--court);color:#fff;border-radius:12px;
+    flex-wrap:wrap;
+  }
+  .round-header.collapsed{background:#dfe8de;color:var(--ink);}
+  .round-header h3{font-size:24px;}
+  .round-header.collapsed h3{color:var(--court);}
+  .round-meta{font-size:13px;color:rgba(255,255,255,0.8);}
+  .round-header.collapsed .round-meta{color:var(--muted);}
+  .round-body{padding:16px 2px 4px;}
+  .round-body.hidden{display:none;}
+
+  .slot-block{margin-bottom:20px;}
+  .slot-title{
+    font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;
+    margin-bottom:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  }
+  .sitting-note{
+    font-weight:500;text-transform:none;letter-spacing:0;color:var(--amber-dark);
+    background:#FCF1DE;padding:3px 10px;border-radius:100px;font-size:12.5px;
+  }
+
+  .courts-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;
+  }
+
+  /* Court card - mini court diagram */
+  .court-card{
+    background:var(--court);
+    border-radius:12px;
+    padding:16px 16px 14px;
+    color:#fff;
+    position:relative;
+    box-shadow:var(--shadow);
+  }
+  .court-card.bonus{outline:2px dashed var(--amber);outline-offset:3px;}
+  .court-tag{
+    font-size:12px;font-weight:700;letter-spacing:0.08em;color:rgba(255,255,255,0.75);
+    margin-bottom:10px;text-transform:uppercase;
+  }
+  .bonus-tag{
+    color:var(--amber);font-weight:700;font-size:11px;margin-left:8px;text-transform:none;
+    letter-spacing:0;
+  }
+  .court-sides{
+    display:flex;align-items:stretch;position:relative;
+    border-top:2px dashed rgba(255,255,255,0.35);
+    padding-top:12px;
+  }
+  .court-sides::before{
+    content:"";position:absolute;left:50%;top:12px;bottom:0;width:0;
+    border-left:2px dashed rgba(255,255,255,0.35);
+  }
+  .side{flex:1;padding:0 10px;text-align:center;}
+  .side .players{font-size:16px;font-weight:600;min-height:44px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;}
+  .vs-chip{
+    position:absolute;top:2px;left:50%;transform:translate(-50%,-50%);
+    background:var(--amber);color:#fff;font-size:11px;font-weight:800;
+    width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 0 4px var(--court);
+  }
+  .winner-badge{
+    display:inline-block;background:var(--teal);color:#fff;font-size:11px;font-weight:700;
+    padding:2px 8px;border-radius:100px;margin-top:6px;
+  }
+  .score-row{display:flex;align-items:center;gap:8px;margin-top:14px;}
+  .score-input{
+    width:48px;text-align:center;padding:7px 0;border-radius:6px;border:none;
+    font-size:16px;font-weight:700;font-family:'Inter',sans-serif;color:var(--ink);
+  }
+  .score-dash{color:rgba(255,255,255,0.6);font-weight:700;}
+  .save-btn{
+    width:100%;margin-top:12px;background:rgba(255,255,255,0.14);color:#fff;
+    border:1.5px solid rgba(255,255,255,0.55);border-radius:8px;padding:8px 0;
+    font-weight:700;font-size:13px;cursor:pointer;
+  }
+  .save-btn:hover{background:rgba(255,255,255,0.26);}
+  .finish-btn{
+    width:100%;margin-top:8px;background:var(--amber);color:#fff;
+    border:none;border-radius:8px;padding:8px 0;
+    font-weight:700;font-size:13px;cursor:pointer;
+  }
+  .finish-btn:hover{background:var(--amber-dark);}
+  .sets-list{margin-top:12px;display:flex;flex-direction:column;gap:6px;}
+  .set-chip{
+    display:flex;align-items:center;justify-content:space-between;gap:8px;
+    background:rgba(255,255,255,0.12);border-radius:8px;padding:6px 10px;
+    font-size:13px;font-weight:600;color:#fff;
+  }
+  .set-chip .set-label{color:rgba(255,255,255,0.7);font-weight:500;}
+  .set-chip .set-remove{
+    cursor:pointer;color:rgba(255,255,255,0.6);font-size:14px;line-height:1;
+    padding:0 2px;
+  }
+  .set-chip .set-remove:hover{color:#fff;}
+  .set-label-input{font-size:12px;color:rgba(255,255,255,0.7);margin-top:12px;margin-bottom:4px;}
+  .final-score{font-size:22px;font-weight:800;margin-top:10px;}
+  .final-sets-line{font-size:12.5px;color:rgba(255,255,255,0.75);margin-top:4px;}
+  .edit-link{
+    display:block;text-align:center;margin-top:8px;font-size:12px;color:rgba(255,255,255,0.8);
+    cursor:pointer;text-decoration:underline;
+  }
+
+  .round-footer{margin-top:18px;text-align:center;}
+
+  .final-cta{
+    margin-top:36px;padding-top:28px;border-top:2px dashed var(--border);
+    text-align:center;
+  }
+  .final-cta-hint{font-size:13px;color:var(--muted);margin:8px 0 0;}
+  .final-card{
+    border:2px solid var(--amber);position:relative;overflow:hidden;
+  }
+  .final-card::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:5px;
+    background:linear-gradient(90deg, var(--amber), var(--teal), var(--amber));
+  }
+  .final-card h2{font-size:32px;color:var(--court);margin-bottom:4px;}
+  .final-card .muted-line{color:var(--muted);font-size:14.5px;margin:0 0 18px;}
+  .final-card table.standings{margin-bottom:22px;}
+  .court-card.final{
+    background:linear-gradient(150deg, var(--court) 55%, var(--court-dark));
+    outline:3px solid var(--amber);outline-offset:3px;
+  }
+  .complete-note{
+    background:#E8F5EE;border:1px solid #BFE3D0;color:#1E6B4A;border-radius:10px;
+    padding:14px 18px;font-size:14px;font-weight:600;text-align:center;
+  }
+
+  /* Standings */
+  .standings-head{text-align:center;margin-bottom:22px;}
+  .standings-head h2{font-size:36px;color:var(--court);}
+  .standings-head p{color:var(--muted);margin-top:6px;}
+  table.standings{width:100%;border-collapse:collapse;font-size:15px;}
+  table.standings th{
+    text-align:left;font-size:12px;color:var(--muted);font-weight:700;
+    text-transform:uppercase;letter-spacing:0.05em;padding:10px 12px;border-bottom:2px solid var(--border);
+  }
+  table.standings td{padding:12px;border-bottom:1px solid var(--border);}
+  table.standings tr:last-child td{border-bottom:none;}
+  .rank-cell{font-family:'Teko',sans-serif;font-size:22px;color:var(--muted);width:36px;}
+  tr.rank-1 .rank-cell{color:var(--amber-dark);}
+  tr.rank-2 .rank-cell{color:#8a8f7f;}
+  tr.rank-3 .rank-cell{color:#a9784f;}
+  .player-name-cell{font-weight:700;}
+  .champion-chip{
+    background:var(--amber);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;
+    border-radius:100px;margin-left:8px;
+  }
+  .points-cell{font-weight:800;color:var(--court);}
+  .unplayed-note{margin-top:16px;font-size:13.5px;color:var(--muted);}
+  .share-banner{
+    background:var(--amber);color:#fff;
+    padding:10px 20px;display:flex;align-items:center;justify-content:center;
+    gap:14px;flex-wrap:wrap;font-size:13.5px;font-weight:600;
+  }
+  .share-banner-text{word-break:break-all;}
+  .share-copy-btn{
+    background:rgba(255,255,255,0.22);border:1.5px solid rgba(255,255,255,0.6);
+    color:#fff;padding:6px 14px;border-radius:100px;font-size:13px;font-weight:700;
+    cursor:pointer;white-space:nowrap;
+  }
+  .share-copy-btn:hover{background:rgba(255,255,255,0.34);}
+  .sync-note{font-size:12px;color:rgba(255,255,255,0.85);}
+  .final-result-banner{
+    background:linear-gradient(90deg, #FCF1DE, #EAF6F0);
+    border:1.5px solid var(--amber);border-radius:10px;
+    padding:14px 18px;font-size:15px;font-weight:600;color:var(--ink);
+    text-align:center;margin-bottom:22px;
+  }
+
+  [hidden]{display:none !important;}
+
+  @media (max-width:600px){
+    .brand .display{font-size:30px;}
+    .card{padding:20px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap topbar-inner">
+    <div class="brand">
+      <span class="display">RALLY ROTATION</span>
+      <span class="tag" id="brandTag">racket sports mix &amp; match</span>
+    </div>
+    <button class="end-btn" id="endSessionBtn" hidden>End Session</button>
+  </div>
+  <div class="wrap stats-strip" id="statsStrip" hidden></div>
+</div>
+
+<div class="share-banner" id="shareBanner" hidden>
+  <span class="share-banner-text">🔗 Shareable link: <span id="shareLinkText"></span></span>
+  <button class="share-copy-btn" id="shareCopyBtn">Copy Link</button>
+  <span class="sync-note" id="syncNote"></span>
+</div>
+
+<main class="wrap">
+
+  <div class="mode-tabs" id="modeTabs">
+    <div class="mode-tab active" data-mode="mixmatch">Mix &amp; Match</div>
+    <div class="mode-tab" data-mode="tournament">Tournament</div>
+  </div>
+
+  <!-- SETUP -->
+  <section id="setupView">
+    <div class="card">
+      <div class="setup-head">
+        <h2>Set up your session</h2>
+        <p>Enter your players and court details — every partner combination gets scheduled automatically, fitted to the time you have.</p>
+      </div>
+
+      <div id="errorBox" class="error-msg" hidden></div>
+
+      <div class="field-row">
+        <div class="field" style="max-width:280px;">
+          <label>Sport</label>
+          <div class="format-toggle" id="sportToggle">
+            <div class="format-opt active" data-sport="badminton">🏸 Badminton</div>
+            <div class="format-opt" data-sport="tennis">🎾 Tennis</div>
+            <div class="format-opt" data-sport="padel">🎾 Padel</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field" style="max-width:160px;">
+          <label for="playerCount">Number of players</label>
+          <input type="number" id="playerCount" min="2" max="30" value="6">
+        </div>
+        <div class="field" style="max-width:220px;">
+          <label>Format</label>
+          <div class="format-toggle" id="formatToggle">
+            <div class="format-opt active" data-format="doubles">Doubles</div>
+            <div class="format-opt" data-format="singles">Singles</div>
+          </div>
+          <div class="hint" id="formatLockNote" hidden>Padel is played as doubles — singles isn't a standard format.</div>
+        </div>
+      </div>
+
+      <div class="names-section">
+        <label>Player names</label>
+        <div class="names-grid" id="namesGrid"></div>
+      </div>
+
+      <hr style="border:none;border-top:1px solid var(--border);margin:24px 0;">
+
+      <div class="field-row">
+        <div class="field">
+          <label for="courtsInput">Courts available</label>
+          <input type="number" id="courtsInput" min="1" max="10" value="1">
+        </div>
+        <div class="field">
+          <label for="durationInput">Total session length (minutes)</label>
+          <input type="number" id="durationInput" min="5" max="600" value="120">
+        </div>
+        <div class="field">
+          <label for="pointsPerMatchInput">Race to how many points (per set)</label>
+          <input type="number" id="pointsPerMatchInput" min="4" max="99" value="21">
+          <div class="hint">Like an Americano/social format — first to this many points wins a set. You can add extra sets during play if a match runs long.</div>
+        </div>
+        <div class="field">
+          <label for="minutesPerMatchInput">Minutes per match</label>
+          <input type="number" id="minutesPerMatchInput" min="1" max="180" value="10">
+        </div>
+      </div>
+      <div class="computed-line" id="computedLine"></div>
+
+      <div style="margin-top:24px;">
+        <button class="primary-btn" id="generateBtn">Generate Schedule</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOURNAMENT SETUP -->
+  <section id="tournamentSetupView" hidden>
+    <div class="card">
+      <div class="setup-head">
+        <h2>Set up your tournament</h2>
+        <p>Groups play round robin first, then the top finishers move into a knockout bracket.</p>
+      </div>
+
+      <div id="tErrorBox" class="error-msg" hidden></div>
+
+      <div class="field-row">
+        <div class="field" style="max-width:280px;">
+          <label>Sport</label>
+          <div class="format-toggle" id="tSportToggle">
+            <div class="format-opt active" data-sport="badminton">🏸 Badminton</div>
+            <div class="format-opt" data-sport="tennis">🎾 Tennis</div>
+            <div class="format-opt" data-sport="padel">🎾 Padel</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field" style="max-width:340px;">
+          <label>Format</label>
+          <div class="format-toggle" id="tFormatToggle">
+            <div class="format-opt active" data-format="doubles">Doubles</div>
+            <div class="format-opt" data-format="singles">Singles</div>
+            <div class="format-opt" data-format="mixed">Mixed Doubles</div>
+          </div>
+          <div class="hint" id="tFormatLockNote" hidden>Padel is played as doubles — singles isn't a standard format.</div>
+        </div>
+        <div class="field" style="max-width:280px;">
+          <label>Skill level</label>
+          <div class="format-toggle" id="tSkillToggle">
+            <div class="format-opt active" data-skill="beginner">Beginner</div>
+            <div class="format-opt" data-skill="intermediate">Intermediate</div>
+            <div class="format-opt" data-skill="advanced">Advanced</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field" style="max-width:160px;">
+          <label for="tPlayerCount">Number of players</label>
+          <input type="number" id="tPlayerCount" min="4" max="60" value="16">
+        </div>
+      </div>
+
+      <div class="names-section">
+        <label>Player names</label>
+        <div class="names-grid" id="tNamesGrid"></div>
+      </div>
+
+      <hr style="border:none;border-top:1px solid var(--border);margin:24px 0;">
+
+      <div class="field-row">
+        <div class="field" style="max-width:160px;">
+          <label for="tGroupsInput">Number of groups</label>
+          <input type="number" id="tGroupsInput" min="1" max="16" value="4">
+        </div>
+        <div class="field" style="max-width:200px;">
+          <label for="tAdvanceInput">Top N advance per group</label>
+          <input type="number" id="tAdvanceInput" min="1" max="8" value="2">
+        </div>
+        <div class="field" style="max-width:260px;">
+          <label>Knockout stage</label>
+          <div class="format-toggle" id="tStageToggle">
+            <div class="format-opt active" data-stage="4">Knockouts → QF → SF → Final</div>
+            <div class="format-opt" data-stage="3">Knockouts → SF → Final</div>
+          </div>
+        </div>
+      </div>
+      <div class="computed-line" id="tBracketLine"></div>
+
+      <hr style="border:none;border-top:1px solid var(--border);margin:24px 0;">
+
+      <div class="field-row">
+        <div class="field">
+          <label for="tCourtsInput">Courts available</label>
+          <input type="number" id="tCourtsInput" min="1" max="10" value="1">
+        </div>
+        <div class="field">
+          <label for="tPointsInput">Race to how many points (per set)</label>
+          <input type="number" id="tPointsInput" min="4" max="99" value="21">
+        </div>
+      </div>
+
+      <div style="margin-top:24px;">
+        <button class="primary-btn" id="tGenerateBtn">Generate Tournament</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOURNAMENT GROUP STAGE -->
+  <section id="tGroupsView" hidden>
+    <div id="tGroupsContainer"></div>
+    <div class="round-footer" id="tAdvanceFooter"></div>
+  </section>
+
+  <!-- TOURNAMENT BRACKET -->
+  <section id="tBracketView" hidden>
+    <div id="tBracketContainer"></div>
+  </section>
+
+  <!-- SCHEDULE -->
+  <section id="scheduleView" hidden>
+    <div id="roundsContainer"></div>
+    <div class="round-footer" id="roundFooter"></div>
+
+    <div class="final-cta" id="finalCta">
+      <button class="secondary-btn" id="playFinalBtn">🏆 Play Final</button>
+      <p class="final-cta-hint">Seeds the top 4 players from the current standings into a final match.</p>
+    </div>
+    <div id="finalSection" hidden></div>
+  </section>
+
+  <!-- STANDINGS -->
+  <section id="standingsView" hidden>
+    <div class="card">
+      <div class="standings-head">
+        <h2>Final Standings 🏸</h2>
+        <p id="standingsSub"></p>
+      </div>
+      <div id="finalResultBanner"></div>
+      <table class="standings">
+        <thead>
+          <tr><th>#</th><th>Player</th><th>Played</th><th>W-L</th><th>Pts For</th><th>Pts Against</th><th>Diff</th></tr>
+        </thead>
+        <tbody id="standingsBody"></tbody>
+      </table>
+      <div class="unplayed-note" id="unplayedNote"></div>
+      <div style="margin-top:24px;text-align:center;">
+        <button class="secondary-btn" id="newSessionBtn">Start New Session</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- utilities ---------- */
+  function shuffle(arr){
+    const a = arr.slice();
+    for (let i=a.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i],a[j]] = [a[j],a[i]];
+    }
+    return a;
+  }
+  function chunk(arr,size){
+    const out=[];
+    for (let i=0;i<arr.length;i+=size) out.push(arr.slice(i,i+size));
+    return out;
+  }
+  function keyOf(a,b){ return a<b ? a+'_'+b : b+'_'+a; }
+  function el(tag, cls, html){
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (html !== undefined) e.innerHTML = html;
+    return e;
+  }
+
+  /* ---------- state ---------- */
+  let playerNames = ['Player 1','Player 2','Player 3','Player 4','Player 5','Player 6'];
+  let sport = 'badminton';
+  let format = 'doubles';
+  let players = [];        // [{id, name}]
+  let rounds = [];         // full schedule: [{games:[...], sitOut:[ids], playing:[ids], bonus}]
+  let sessionBuckets = []; // grouped rounds -> [[roundObjs...], [roundObjs...]]
+  let currentBucketShown = 0;
+  let finalRound = null;            // the special final-match round, once created
+  let finalStandingsSnapshot = null; // standings at the moment "Play Final" was clicked
+  let courts = 1;
+  let minutesPerGame = 10;
+  let pointsPerMatch = 21;
+  let slotsPerSession = 1;
+  let gameCounter = 0;
+
+  const SPORT_DEFAULTS = {
+    badminton: { points: 21, minutes: 10, allowSingles: true, label: 'Badminton', emoji: '🏸' },
+    tennis:    { points: 21, minutes: 12, allowSingles: true, label: 'Tennis',    emoji: '🎾' },
+    padel:     { points: 21, minutes: 12, allowSingles: false, label: 'Padel',    emoji: '🎾' }
+  };
+
+  /* ---------- DOM refs ---------- */
+  const playerCountEl = document.getElementById('playerCount');
+  const namesGrid = document.getElementById('namesGrid');
+  const courtsInput = document.getElementById('courtsInput');
+  const durationInput = document.getElementById('durationInput');
+  const pointsPerMatchInput = document.getElementById('pointsPerMatchInput');
+  const minutesPerMatchInput = document.getElementById('minutesPerMatchInput');
+  const sportToggle = document.getElementById('sportToggle');
+  const formatToggle = document.getElementById('formatToggle');
+  const formatLockNote = document.getElementById('formatLockNote');
+  const brandTag = document.getElementById('brandTag');
+  const computedLine = document.getElementById('computedLine');
+  const errorBox = document.getElementById('errorBox');
+  const generateBtn = document.getElementById('generateBtn');
+  const setupView = document.getElementById('setupView');
+  const scheduleView = document.getElementById('scheduleView');
+  const standingsView = document.getElementById('standingsView');
+  const roundsContainer = document.getElementById('roundsContainer');
+  const roundFooter = document.getElementById('roundFooter');
+  const endSessionBtn = document.getElementById('endSessionBtn');
+  const playFinalBtn = document.getElementById('playFinalBtn');
+  const finalCta = document.getElementById('finalCta');
+  const finalSectionEl = document.getElementById('finalSection');
+  const statsStrip = document.getElementById('statsStrip');
+  const newSessionBtn = document.getElementById('newSessionBtn');
+  const standingsBody = document.getElementById('standingsBody');
+  const standingsSub = document.getElementById('standingsSub');
+  const finalResultBanner = document.getElementById('finalResultBanner');
+  const unplayedNote = document.getElementById('unplayedNote');
+
+  /* ---------- setup form behaviour ---------- */
+  function renderPlayerInputs(){
+    const count = Math.max(0, parseInt(playerCountEl.value) || 0);
+    while (playerNames.length < count) playerNames.push('Player ' + (playerNames.length+1));
+    playerNames.length = count;
+    namesGrid.innerHTML = '';
+    playerNames.forEach((name,i)=>{
+      const wrap = el('div','name-field');
+      const num = el('span','name-num', String(i+1));
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = name;
+      input.setAttribute('aria-label','Player '+(i+1)+' name');
+      input.addEventListener('input', e=>{ playerNames[i] = e.target.value; });
+      wrap.appendChild(num);
+      wrap.appendChild(input);
+      namesGrid.appendChild(wrap);
+    });
+  }
+  playerCountEl.addEventListener('input', renderPlayerInputs);
+  renderPlayerInputs();
+
+  document.querySelectorAll('#formatToggle .format-opt').forEach(opt=>{
+    opt.addEventListener('click', ()=>{
+      if (opt.classList.contains('disabled')) return;
+      document.querySelectorAll('#formatToggle .format-opt').forEach(o=>o.classList.remove('active'));
+      opt.classList.add('active');
+      format = opt.dataset.format;
+      updateComputedLine();
+    });
+  });
+
+  document.querySelectorAll('#sportToggle .format-opt').forEach(opt=>{
+    opt.addEventListener('click', ()=>{
+      document.querySelectorAll('#sportToggle .format-opt').forEach(o=>o.classList.remove('active'));
+      opt.classList.add('active');
+      sport = opt.dataset.sport;
+      const cfg = SPORT_DEFAULTS[sport];
+
+      pointsPerMatchInput.value = cfg.points;
+      minutesPerMatchInput.value = cfg.minutes;
+      brandTag.textContent = cfg.label + ' mix & match';
+
+      const singlesOpt = document.querySelector('#formatToggle .format-opt[data-format="singles"]');
+      const doublesOpt = document.querySelector('#formatToggle .format-opt[data-format="doubles"]');
+      if (!cfg.allowSingles){
+        singlesOpt.classList.add('disabled');
+        singlesOpt.classList.remove('active');
+        doublesOpt.classList.add('active');
+        format = 'doubles';
+        formatLockNote.hidden = false;
+      } else {
+        singlesOpt.classList.remove('disabled');
+        formatLockNote.hidden = true;
+      }
+      updateComputedLine();
+    });
+  });
+
+  function updateComputedLine(){
+    const pts = parseInt(pointsPerMatchInput.value)||0;
+    const mins = parseInt(minutesPerMatchInput.value)||0;
+    const minReq = format==='doubles' ? 4 : 2;
+    computedLine.textContent = 'Race to ' + pts + ' points per set, ~' + mins + ' min per match · needs at least ' + minReq + ' players for ' + format;
+  }
+  pointsPerMatchInput.addEventListener('input', updateComputedLine);
+  minutesPerMatchInput.addEventListener('input', updateComputedLine);
+  updateComputedLine();
+
+  function showError(msg){
+    errorBox.textContent = msg;
+    errorBox.hidden = false;
+    errorBox.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+  function clearError(){ errorBox.hidden = true; }
+
+  /* ---------- schedule generation ----------
+     Both builders share the same fairness model:
+     - "playStreak" / "sitOutStreak" track consecutive play / rest per player.
+     - Each round, a fairness pool (most-rested first, capped so nobody plays
+       3 in a row unless mathematically forced by low court/player ratio) is
+       sampled many times to find the arrangement that unlocks the most
+       brand-new partnerships/matchups; ties broken in favor of resting players.
+  ---------------------------------------------- */
+  function buildDoublesSchedule(playerIds, courtsN){
+    const N = playerIds.length;
+    const usedCount = {};
+    let uncovered = new Set();
+    for (let i=0;i<N;i++) for (let j=i+1;j<N;j++){
+      const k = keyOf(playerIds[i],playerIds[j]);
+      uncovered.add(k); usedCount[k] = 0;
+    }
+    const sitOutStreak = {}, playStreak = {};
+    playerIds.forEach(id=>{ sitOutStreak[id]=0; playStreak[id]=0; });
+    const roundsOut = [];
+    const maxGroups = Math.max(0, Math.min(courtsN, Math.floor(N/4)));
+    const need = maxGroups*4;
+
+    function commitRound(games, playingSet, bonus){
+      games.forEach(g=>{
+        const kA = keyOf(g.teamA[0], g.teamA[1]);
+        const kB = keyOf(g.teamB[0], g.teamB[1]);
+        usedCount[kA]++; uncovered.delete(kA);
+        usedCount[kB]++; uncovered.delete(kB);
+        g.id = 'g' + (gameCounter++);
+        g.type = 'doubles';
+        g.players = [...g.teamA, ...g.teamB];
+        g.result = null;
+        g.bonus = !!bonus;
+      });
+      playerIds.forEach(id=>{
+        if (playingSet.has(id)){ sitOutStreak[id]=0; playStreak[id]++; }
+        else { sitOutStreak[id]++; playStreak[id]=0; }
+      });
+      roundsOut.push({ games, sitOut: playerIds.filter(id=>!playingSet.has(id)), playing: [...playingSet] });
+    }
+
+    let safety = 0;
+    const cap = Math.max(200, N*N*10);
+    while (uncovered.size > 0 && safety < cap && maxGroups > 0){
+      safety++;
+      const eligible = playerIds.filter(id=>playStreak[id] < 2);
+      const forced = playerIds.filter(id=>playStreak[id] >= 2);
+      const base = eligible.length >= need
+        ? eligible
+        : eligible.concat(forced.slice().sort((a,b)=>playStreak[a]-playStreak[b]).slice(0, need-eligible.length));
+      const sortedBase = base.slice().sort((a,b)=>
+        (sitOutStreak[b]-playStreak[b]) - (sitOutStreak[a]-playStreak[a]) || (Math.random()-0.5)
+      );
+      const poolSize = Math.min(sortedBase.length, need + 4);
+      const pool = sortedBase.slice(0, poolSize);
+
+      let best = null;
+      for (let t=0;t<100;t++){
+        const playing = shuffle(pool).slice(0, need);
+        const groups = chunk(shuffle(playing), 4);
+        let totalNew = 0, totalPenalty = 0;
+        const plans = [];
+        for (const g of groups){
+          const [a,b,c,d] = g;
+          const options = [ [[a,b],[c,d]], [[a,c],[b,d]], [[a,d],[b,c]] ];
+          let bestOpt = null;
+          for (const opt of options){
+            const kA = keyOf(opt[0][0],opt[0][1]), kB = keyOf(opt[1][0],opt[1][1]);
+            const newCount = (uncovered.has(kA)?1:0) + (uncovered.has(kB)?1:0);
+            const penalty = (uncovered.has(kA)?0:usedCount[kA]) + (uncovered.has(kB)?0:usedCount[kB]);
+            const score = newCount*100 - penalty;
+            if (!bestOpt || score > bestOpt.score) bestOpt = {teamA:opt[0], teamB:opt[1], score, newCount, penalty};
+          }
+          plans.push(bestOpt);
+          totalNew += bestOpt.newCount; totalPenalty += bestOpt.penalty;
+        }
+        const fairnessBonus = playing.reduce((s,id)=>s+sitOutStreak[id],0);
+        const attemptScore = totalNew*1000 - totalPenalty*5 + fairnessBonus;
+        if (!best || attemptScore > best.attemptScore) best = {plans, totalNew, attemptScore, playing};
+      }
+      const games = best.plans.map(p=>({teamA:p.teamA, teamB:p.teamB}));
+      commitRound(games, new Set(best.playing), best.totalNew === 0);
+    }
+    return roundsOut;
+  }
+
+  function buildSinglesSchedule(playerIds, courtsN){
+    const N = playerIds.length;
+    const usedCount = {};
+    let uncovered = new Set();
+    for (let i=0;i<N;i++) for (let j=i+1;j<N;j++){
+      const k = keyOf(playerIds[i],playerIds[j]);
+      uncovered.add(k); usedCount[k] = 0;
+    }
+    const sitOutStreak = {}, playStreak = {};
+    playerIds.forEach(id=>{ sitOutStreak[id]=0; playStreak[id]=0; });
+    const roundsOut = [];
+    const maxGroups = Math.max(0, Math.min(courtsN, Math.floor(N/2)));
+    const need = maxGroups*2;
+
+    function commitRound(games, playingSet, bonus){
+      games.forEach(g=>{
+        const k = keyOf(g.p1,g.p2);
+        usedCount[k]++; uncovered.delete(k);
+        g.id = 'g' + (gameCounter++);
+        g.type = 'singles';
+        g.players = [g.p1, g.p2];
+        g.result = null;
+        g.bonus = !!bonus;
+      });
+      playerIds.forEach(id=>{
+        if (playingSet.has(id)){ sitOutStreak[id]=0; playStreak[id]++; }
+        else { sitOutStreak[id]++; playStreak[id]=0; }
+      });
+      roundsOut.push({ games, sitOut: playerIds.filter(id=>!playingSet.has(id)), playing: [...playingSet] });
+    }
+
+    let safety = 0;
+    const cap = Math.max(200, N*N*10);
+    while (uncovered.size > 0 && safety < cap && maxGroups > 0){
+      safety++;
+      const eligible = playerIds.filter(id=>playStreak[id] < 2);
+      const forced = playerIds.filter(id=>playStreak[id] >= 2);
+      const base = eligible.length >= need
+        ? eligible
+        : eligible.concat(forced.slice().sort((a,b)=>playStreak[a]-playStreak[b]).slice(0, need-eligible.length));
+      const sortedBase = base.slice().sort((a,b)=>
+        (sitOutStreak[b]-playStreak[b]) - (sitOutStreak[a]-playStreak[a]) || (Math.random()-0.5)
+      );
+      const poolSize = Math.min(sortedBase.length, need + 4);
+      const pool = sortedBase.slice(0, poolSize);
+
+      let best = null;
+      for (let t=0;t<100;t++){
+        const playing = shuffle(pool).slice(0, need);
+        const pairs = chunk(playing, 2);
+        let totalNew = 0, totalPenalty = 0;
+        for (const [a,b] of pairs){
+          const k = keyOf(a,b);
+          if (uncovered.has(k)) totalNew++; else totalPenalty += usedCount[k];
+        }
+        const fairnessBonus = playing.reduce((s,id)=>s+sitOutStreak[id],0);
+        const attemptScore = totalNew*1000 - totalPenalty*5 + fairnessBonus;
+        if (!best || attemptScore > best.attemptScore) best = {pairs, totalNew, attemptScore, playing};
+      }
+      const games = best.pairs.map(([a,b])=>({p1:a, p2:b}));
+      commitRound(games, new Set(best.playing), best.totalNew === 0);
+    }
+    return roundsOut;
+  }
+
+
+  /* ---------- generate handler ---------- */
+  generateBtn.addEventListener('click', ()=>{
+    clearError();
+    finalRound = null; finalStandingsSnapshot = null;
+    finalSectionEl.hidden = true; finalSectionEl.innerHTML = '';
+    playFinalBtn.disabled = false; playFinalBtn.textContent = '🏆 Play Final';
+    const names = playerNames.map(n=>n.trim());
+    if (names.some(n=>!n)) return showError('Please give every player a name.');
+    const uniqueCheck = new Set(names.map(n=>n.toLowerCase()));
+    if (uniqueCheck.size !== names.length) return showError('Player names should be unique so scores are easy to track.');
+
+    const minPlayers = format==='doubles' ? 4 : 2;
+    if (names.length < minPlayers) return showError('You need at least ' + minPlayers + ' players for ' + format + '.');
+
+    courts = parseInt(courtsInput.value) || 1;
+    if (courts < 1) return showError('Enter at least 1 court.');
+    const totalMinutes = parseInt(durationInput.value) || 0;
+    minutesPerGame = parseInt(minutesPerMatchInput.value) || 0;
+    pointsPerMatch = parseInt(pointsPerMatchInput.value) || 0;
+    if (minutesPerGame <= 0) return showError('Enter a valid number of minutes per match.');
+    if (pointsPerMatch <= 0) return showError('Enter a valid points target for each match.');
+    if (totalMinutes < minutesPerGame) return showError('Your session (' + totalMinutes + ' min) is shorter than a single match (' + minutesPerGame + ' min).');
+
+    players = names.map((name,i)=>({id:i, name}));
+    gameCounter = 0;
+    const ids = players.map(p=>p.id);
+    rounds = format==='doubles' ? buildDoublesSchedule(ids, courts) : buildSinglesSchedule(ids, courts);
+
+    slotsPerSession = Math.max(1, Math.floor(totalMinutes / minutesPerGame));
+    sessionBuckets = chunk(rounds, slotsPerSession);
+    currentBucketShown = 0;
+
+    setupView.hidden = true;
+    scheduleView.hidden = false;
+    endSessionBtn.hidden = false;
+    statsStrip.hidden = false;
+    renderStatsStrip();
+    renderSchedule();
+  });
+
+  function totalGamesCount(){ return rounds.reduce((s,r)=>s+r.games.length,0); }
+  function bonusGamesCount(){ return rounds.reduce((s,r)=>s+r.games.filter(g=>g.bonus).length,0); }
+
+  function renderStatsStrip(){
+    const bonus = bonusGamesCount();
+    const cfg = SPORT_DEFAULTS[sport];
+    statsStrip.innerHTML =
+      '<span>' + cfg.emoji + ' <b>' + cfg.label + '</b></span>' +
+      '<span><b>' + players.length + '</b> players</span>' +
+      '<span><b>' + courts + '</b> court' + (courts>1?'s':'') + '</span>' +
+      '<span><b>' + totalGamesCount() + '</b> total matchups' + (bonus>0 ? ' (' + bonus + ' bonus rematch' + (bonus>1?'es':'') + ')' : '') + '</span>' +
+      '<span>Race to <b>' + pointsPerMatch + '</b></span>' +
+      '<span><b>' + minutesPerGame + '</b> min / match</span>' +
+      '<span><b>' + sessionBuckets.length + '</b> round' + (sessionBuckets.length>1?'s':'') + ' planned</span>';
+  }
+
+  /* ---------- rendering schedule ---------- */
+  function playerName(id){
+    const p = players.find(p=>p.id===id);
+    return p ? p.name : '?';
+  }
+
+  function renderSchedule(){
+    roundsContainer.innerHTML = '';
+    for (let b=0; b<=currentBucketShown && b<sessionBuckets.length; b++){
+      roundsContainer.appendChild(renderRoundBlock(b));
+    }
+    renderFooter();
+  }
+
+  function refreshView(){
+    renderSchedule();
+    if (finalRound) renderFinalSection();
+  }
+
+  function bucketComplete(bIdx){
+    return sessionBuckets[bIdx].every(r => r.games.every(g => g.result));
+  }
+
+  function renderRoundBlock(bIdx){
+    const isCurrent = bIdx === currentBucketShown;
+    const block = el('div','round-block');
+    const header = el('div','round-header' + (isCurrent ? '' : ' collapsed'));
+    const bucketRounds = sessionBuckets[bIdx];
+    const gamesInBucket = bucketRounds.reduce((s,r)=>s+r.games.length,0);
+    const doneInBucket = bucketRounds.reduce((s,r)=>s+r.games.filter(g=>g.result).length,0);
+    const estMinutes = bucketRounds.length * minutesPerGame;
+
+    header.innerHTML =
+      '<h3>Round ' + (bIdx+1) + '</h3>' +
+      '<span class="round-meta">' + gamesInBucket + ' matches · ~' + estMinutes + ' min · ' + doneInBucket + '/' + gamesInBucket + ' scored</span>';
+    header.addEventListener('click', ()=>{
+      const body = block.querySelector('.round-body');
+      body.classList.toggle('hidden');
+    });
+    block.appendChild(header);
+
+    const body = el('div','round-body' + (isCurrent ? '' : ' hidden'));
+    bucketRounds.forEach((roundObj, slotIdx)=>{
+      body.appendChild(renderSlot(roundObj, slotIdx));
+    });
+    block.appendChild(body);
+    return block;
+  }
+
+  function renderSlot(roundObj, slotIdx){
+    const slotBlock = el('div','slot-block');
+    const title = el('div','slot-title');
+    title.innerHTML = 'Match ' + (slotIdx+1);
+    if (roundObj.sitOut.length){
+      const note = el('span','sitting-note', 'Resting: ' + roundObj.sitOut.map(playerName).join(', '));
+      title.appendChild(note);
+    }
+    slotBlock.appendChild(title);
+
+    const grid = el('div','courts-grid');
+    roundObj.games.forEach((game, courtIdx)=>{
+      grid.appendChild(renderCourtCard(game, courtIdx));
+    });
+    slotBlock.appendChild(grid);
+    return slotBlock;
+  }
+
+  function sideLabel(game, side){
+    if (game.type === 'doubles' || game.type === 'tournament'){
+      const team = side==='A' ? game.teamA : game.teamB;
+      return team.map(playerName);
+    }
+    return [ side==='A' ? playerName(game.p1) : playerName(game.p2) ];
+  }
+
+  function renderCourtCard(game, courtIdx){
+    const card = el('div','court-card' + (game.bonus ? ' bonus' : '') + (game.isFinal ? ' final' : ''));
+    const tag = el('div','court-tag',
+      game.isFinal
+        ? '🏆 Final'
+        : 'Court ' + (courtIdx+1) + (game.bonus ? '<span class="bonus-tag">Bonus rematch</span>' : '')
+    );
+    card.appendChild(tag);
+
+    const sides = el('div','court-sides');
+    sides.appendChild(el('div','vs-chip','VS'));
+
+    const sideA = el('div','side');
+    const namesA = sideLabel(game,'A');
+    sideA.appendChild(el('div','players', namesA.join('<br>')));
+    const sideB = el('div','side');
+    const namesB = sideLabel(game,'B');
+    sideB.appendChild(el('div','players', namesB.join('<br>')));
+
+    sides.appendChild(sideA);
+    sides.appendChild(sideB);
+    card.appendChild(sides);
+
+    if (game.result && game.result.skipped){
+      card.appendChild(el('div','winner-badge','⏭ Match skipped'));
+      const playLink = el('div','edit-link','Play this match instead');
+      playLink.addEventListener('click', ()=>{ game.result = null; refreshView(); });
+      card.appendChild(playLink);
+    } else if (game.result){
+      const winnerNames = game.result.winner === 'A' ? namesA : namesB;
+      const scoreLine = el('div','final-score', game.result.scoreA + ' – ' + game.result.scoreB);
+      card.appendChild(scoreLine);
+      if (game.result.sets && game.result.sets.length > 1){
+        const setsText = game.result.sets.map(s=>s.a+'–'+s.b).join(', ');
+        card.appendChild(el('div','final-sets-line', game.result.sets.length + ' sets: ' + setsText));
+      }
+      card.appendChild(el('div','winner-badge','🏆 ' + winnerNames.join(' & ') + ' won'));
+      const editLink = el('div','edit-link','Edit result');
+      editLink.addEventListener('click', ()=>{
+        game.wipSets = (game.result.sets || [{a:game.result.scoreA, b:game.result.scoreB}]).slice();
+        game.result = null;
+        refreshView();
+      });
+      card.appendChild(editLink);
+    } else {
+      const wip = game.wipSets || [];
+
+      if (wip.length > 0){
+        const setsList = el('div','sets-list');
+        wip.forEach((s,i)=>{
+          const chip = el('div','set-chip');
+          chip.appendChild(el('span','set-label','Set ' + (i+1)));
+          chip.appendChild(el('span','', s.a + ' – ' + s.b));
+          const remove = el('span','set-remove','✕');
+          remove.addEventListener('click', ()=>{
+            wip.splice(i,1);
+            refreshView();
+          });
+          chip.appendChild(remove);
+          setsList.appendChild(chip);
+        });
+        card.appendChild(setsList);
+      }
+
+      const setLabel = el('div','set-label-input', 'Set ' + (wip.length+1));
+      card.appendChild(setLabel);
+
+      const scoreRow = el('div','score-row');
+      const inputA = document.createElement('input');
+      inputA.type='number'; inputA.min='0'; inputA.className='score-input'; inputA.placeholder='0';
+      const dash = el('span','score-dash','–');
+      const inputB = document.createElement('input');
+      inputB.type='number'; inputB.min='0'; inputB.className='score-input'; inputB.placeholder='0';
+      scoreRow.appendChild(inputA); scoreRow.appendChild(dash); scoreRow.appendChild(inputB);
+      card.appendChild(scoreRow);
+
+      const saveBtn = el('button','save-btn', wip.length===0 ? 'Save Set' : 'Save Set ' + (wip.length+1));
+      saveBtn.addEventListener('click', ()=>{
+        const sa = parseInt(inputA.value), sb = parseInt(inputB.value);
+        if (isNaN(sa) || isNaN(sb)) { alert('Enter both scores.'); return; }
+        if (sa === sb) { alert("Scores can't be tied — enter a winner for the set."); return; }
+        game.wipSets = wip.concat([{a:sa, b:sb}]);
+        refreshView();
+      });
+      card.appendChild(saveBtn);
+
+      if (wip.length > 0){
+        const finishBtn = el('button','finish-btn', '✓ Finish Match');
+        finishBtn.addEventListener('click', ()=>{
+          const setsA = wip.filter(s=>s.a>s.b).length;
+          const setsB = wip.filter(s=>s.b>s.a).length;
+          const totalA = wip.reduce((sum,s)=>sum+s.a, 0);
+          const totalB = wip.reduce((sum,s)=>sum+s.b, 0);
+          let winner;
+          if (setsA !== setsB) winner = setsA > setsB ? 'A' : 'B';
+          else if (totalA !== totalB) winner = totalA > totalB ? 'A' : 'B';
+          else { alert('Sets and total points are tied — add one more set to decide a winner.'); return; }
+          game.result = { sets: wip.slice(), setsA, setsB, winner, scoreA: totalA, scoreB: totalB };
+          delete game.wipSets;
+          refreshView();
+        });
+        card.appendChild(finishBtn);
+      }
+
+      const skipLink = el('div','edit-link','Skip this match');
+      skipLink.addEventListener('click', ()=>{
+        delete game.wipSets;
+        game.result = { skipped: true };
+        refreshView();
+      });
+      card.appendChild(skipLink);
+    }
+    return card;
+  }
+
+  function extendScheduleWithFreshRotation(){
+    const ids = players.map(p=>p.id);
+    const extra = format==='doubles' ? buildDoublesSchedule(ids, courts) : buildSinglesSchedule(ids, courts);
+    rounds = rounds.concat(extra);
+    const newBuckets = chunk(extra, slotsPerSession);
+    sessionBuckets = sessionBuckets.concat(newBuckets);
+  }
+
+  function renderFooter(){
+    roundFooter.innerHTML = '';
+    const bIdx = currentBucketShown;
+    if (!bucketComplete(bIdx)) return;
+
+    const isLastKnownBucket = bIdx + 1 >= sessionBuckets.length;
+    if (isLastKnownBucket){
+      roundFooter.appendChild(el('div','complete-note','Every matchup in this rotation has been played! 🏸 Start another round to begin a fresh rotation, or end the session to see standings.'));
+    }
+    const btn = el('button','primary-btn', 'Start Round ' + (bIdx+2) + (isLastKnownBucket ? ' (New Rotation)' : ''));
+    btn.style.marginTop = '14px';
+    btn.addEventListener('click', ()=>{
+      if (currentBucketShown + 1 >= sessionBuckets.length) extendScheduleWithFreshRotation();
+      currentBucketShown++;
+      renderStatsStrip();
+      renderSchedule();
+      window.scrollTo({top: roundsContainer.lastChild.offsetTop - 20, behavior:'smooth'});
+    });
+    roundFooter.appendChild(btn);
+  }
+
+  /* ---------- standings ---------- */
+  function computeStandings(){
+    const stats = {};
+    players.forEach(p=>{ stats[p.id] = {id:p.id, name:p.name, played:0, won:0, lost:0, pointsFor:0, pointsAgainst:0}; });
+    rounds.forEach(r=>{
+      r.games.forEach(g=>{
+        if (!g.result || g.result.skipped) return;
+        const aIds = g.type==='doubles' ? g.teamA : [g.p1];
+        const bIds = g.type==='doubles' ? g.teamB : [g.p2];
+        aIds.forEach(id=>{
+          stats[id].played++;
+          stats[id].pointsFor += g.result.scoreA;
+          stats[id].pointsAgainst += g.result.scoreB;
+          if (g.result.winner==='A') stats[id].won++; else stats[id].lost++;
+        });
+        bIds.forEach(id=>{
+          stats[id].played++;
+          stats[id].pointsFor += g.result.scoreB;
+          stats[id].pointsAgainst += g.result.scoreA;
+          if (g.result.winner==='B') stats[id].won++; else stats[id].lost++;
+        });
+      });
+    });
+    return Object.values(stats).map(s=>({
+      ...s,
+      diff: s.pointsFor - s.pointsAgainst,
+      winPct: s.played ? Math.round((s.won/s.played)*100) : 0,
+      points: s.pointsFor
+    })).sort((x,y)=> y.points - x.points || y.diff - x.diff || y.winPct - x.winPct || x.name.localeCompare(y.name));
+  }
+
+  /* ---------- final match ---------- */
+  function buildStandingsTable(standingsList, highlightIds){
+    const table = document.createElement('table');
+    table.className = 'standings';
+    table.innerHTML = '<thead><tr><th>#</th><th>Player</th><th>Played</th><th>W-L</th><th>Pts For</th><th>Pts Against</th><th>Diff</th></tr></thead>';
+    const tbody = document.createElement('tbody');
+    standingsList.forEach((s,i)=>{
+      const tr = document.createElement('tr');
+      tr.className = 'rank-' + (i+1);
+      const finalist = highlightIds && highlightIds.includes(s.id) ? ' 🏸' : '';
+      const diffText = (s.diff > 0 ? '+' : '') + s.diff;
+      tr.innerHTML =
+        '<td class="rank-cell">' + (i+1) + '</td>' +
+        '<td class="player-name-cell">' + s.name + finalist + '</td>' +
+        '<td>' + s.played + '</td>' + '<td>' + s.won + '-' + s.lost + '</td>' +
+        '<td>' + s.pointsFor + '</td>' + '<td>' + s.pointsAgainst + '</td>' +
+        '<td class="points-cell">' + diffText + '</td>';
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    return table;
+  }
+
+  function renderFinalSection(){
+    finalSectionEl.innerHTML = '';
+    finalSectionEl.hidden = false;
+    const card = el('div','card final-card');
+    card.appendChild(el('h2','', '🏆 The Final'));
+    card.appendChild(el('p','muted-line',
+      'Standings at kickoff — seeded ' + (format==='doubles' ? 'top 4 (1st & 4th vs 2nd & 3rd)' : 'top 2') + ' into the final match below.'
+    ));
+    card.appendChild(buildStandingsTable(finalStandingsSnapshot, finalRound.playing));
+
+    const grid = el('div','courts-grid');
+    grid.appendChild(renderCourtCard(finalRound.games[0], 0));
+    card.appendChild(grid);
+
+    finalSectionEl.appendChild(card);
+  }
+
+  playFinalBtn.addEventListener('click', ()=>{
+    if (finalRound) return;
+    const neededCount = format === 'doubles' ? 4 : 2;
+    if (players.length < neededCount){
+      alert('You need at least ' + neededCount + ' players to play a final.');
+      return;
+    }
+    const standingsNow = computeStandings();
+    const gamesPlayedSoFar = rounds.reduce((s,r)=>s+r.games.filter(g=>g.result && !g.result.skipped).length,0);
+    if (gamesPlayedSoFar === 0){
+      if (!confirm('No matches have been scored yet, so the standings are just alphabetical. Play the final anyway?')) return;
+    }
+    const top = standingsNow.slice(0, neededCount);
+    let finalGame;
+    if (format === 'doubles'){
+      finalGame = { teamA: [top[0].id, top[3].id], teamB: [top[1].id, top[2].id] };
+    } else {
+      finalGame = { p1: top[0].id, p2: top[1].id };
+    }
+    finalGame.id = 'final';
+    finalGame.type = format;
+    finalGame.players = format === 'doubles' ? [...finalGame.teamA, ...finalGame.teamB] : [finalGame.p1, finalGame.p2];
+    finalGame.result = null;
+    finalGame.bonus = false;
+    finalGame.isFinal = true;
+
+    const playingSet = new Set(finalGame.players);
+    finalRound = {
+      games: [finalGame],
+      sitOut: players.filter(p=>!playingSet.has(p.id)).map(p=>p.id),
+      playing: [...playingSet],
+      isFinal: true
+    };
+    finalStandingsSnapshot = top;
+    rounds.push(finalRound);
+
+    playFinalBtn.disabled = true;
+    playFinalBtn.textContent = '🏆 Final scheduled below';
+    renderFinalSection();
+    finalSectionEl.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+
+  function endSession(){
+    const standings = computeStandings();
+    const totalGames = totalGamesCount();
+    const played = rounds.reduce((s,r)=>s+r.games.filter(g=>g.result && !g.result.skipped).length,0);
+    const skipped = rounds.reduce((s,r)=>s+r.games.filter(g=>g.result && g.result.skipped).length,0);
+
+    scheduleView.hidden = true;
+    setupView.hidden = true;
+    standingsView.hidden = false;
+    endSessionBtn.hidden = true;
+
+    standingsSub.textContent = played + ' of ' + totalGames + ' matchups played across ' + players.length + ' players. Ranked by total points scored (Pts For).';
+
+    finalResultBanner.innerHTML = '';
+    if (finalRound && finalRound.games[0].result && !finalRound.games[0].result.skipped){
+      const fg = finalRound.games[0];
+      const namesA = sideLabel(fg,'A'), namesB = sideLabel(fg,'B');
+      const winnerNames = fg.result.winner === 'A' ? namesA : namesB;
+      const loserNames = fg.result.winner === 'A' ? namesB : namesA;
+      const winScore = fg.result.winner === 'A' ? fg.result.scoreA : fg.result.scoreB;
+      const loseScore = fg.result.winner === 'A' ? fg.result.scoreB : fg.result.scoreA;
+      const banner = el('div','final-result-banner',
+        '🏆 Final: ' + winnerNames.join(' & ') + ' defeated ' + loserNames.join(' & ') + ', ' + winScore + '–' + loseScore
+      );
+      finalResultBanner.appendChild(banner);
+    }
+
+    standingsBody.innerHTML = '';
+    standings.forEach((s,i)=>{
+      const tr = document.createElement('tr');
+      tr.className = 'rank-' + (i+1);
+      const diffText = (s.diff > 0 ? '+' : '') + s.diff;
+      tr.innerHTML =
+        '<td class="rank-cell">' + (i+1) + '</td>' +
+        '<td class="player-name-cell">' + s.name + (i===0 && s.played>0 ? '<span class="champion-chip">Champion</span>' : '') + '</td>' +
+        '<td>' + s.played + '</td>' +
+        '<td>' + s.won + '-' + s.lost + '</td>' +
+        '<td>' + s.pointsFor + '</td>' +
+        '<td>' + s.pointsAgainst + '</td>' +
+        '<td class="points-cell">' + diffText + '</td>';
+      standingsBody.appendChild(tr);
+    });
+
+    const unscored = totalGames - played - skipped;
+    const notes = [];
+    if (skipped > 0) notes.push(skipped + ' matchup' + (skipped>1?'s were':' was') + ' skipped');
+    if (unscored > 0) notes.push(unscored + ' matchup' + (unscored>1?'s were':' was') + ' never scored');
+    unplayedNote.textContent = notes.length
+      ? notes.join(' and ') + ' — none of these count toward the standings above.'
+      : 'Every matchup was played and scored — nice work covering the full rotation!';
+  }
+  endSessionBtn.addEventListener('click', endSession);
+
+  newSessionBtn.addEventListener('click', ()=>{
+    standingsView.hidden = true;
+    setupView.hidden = false;
+    statsStrip.hidden = true;
+    rounds = []; sessionBuckets = []; currentBucketShown = 0;
+    finalRound = null; finalStandingsSnapshot = null;
+    finalSectionEl.hidden = true; finalSectionEl.innerHTML = '';
+    playFinalBtn.disabled = false; playFinalBtn.textContent = '🏆 Play Final';
+    clearError();
+  });
+
+  /* =========================================================
+     TOURNAMENT MODE
+  ========================================================= */
+  let tPlayerNames = ['Player 1','Player 2','Player 3','Player 4','Player 5','Player 6','Player 7','Player 8',
+                       'Player 9','Player 10','Player 11','Player 12','Player 13','Player 14','Player 15','Player 16'];
+  let tPlayerGenders = {}; // index -> 'M'/'F'
+  let tSport = 'badminton';
+  let tFormat = 'doubles'; // singles | doubles | mixed
+  let tSkill = 'beginner';
+  let tGroups = [];        // array of arrays of competitors
+  let tGroupMatches = [];  // array of arrays (per group) of match objects
+  let tCompetitors = [];
+  let tStageSize = 4;      // 4 = Knockouts->QF->SF->Final (16), 3 = Knockouts->SF->Final (8)
+  let tAdvancePerGroup = 2;
+  let tBracketRounds = [];
+  let tCurrentBracketRound = 0;
+
+  const modeTabs = document.getElementById('modeTabs');
+  const tournamentSetupView = document.getElementById('tournamentSetupView');
+  const tGroupsView = document.getElementById('tGroupsView');
+  const tBracketView = document.getElementById('tBracketView');
+  const tGroupsContainer = document.getElementById('tGroupsContainer');
+  const tAdvanceFooter = document.getElementById('tAdvanceFooter');
+  const tBracketContainer = document.getElementById('tBracketContainer');
+  const tPlayerCountEl = document.getElementById('tPlayerCount');
+  const tNamesGrid = document.getElementById('tNamesGrid');
+  const tGroupsInput = document.getElementById('tGroupsInput');
+  const tAdvanceInput = document.getElementById('tAdvanceInput');
+  const tStageToggle = document.getElementById('tStageToggle');
+  const tBracketLine = document.getElementById('tBracketLine');
+  const tCourtsInput = document.getElementById('tCourtsInput');
+  const tPointsInput = document.getElementById('tPointsInput');
+  const tErrorBox = document.getElementById('tErrorBox');
+  const tGenerateBtn = document.getElementById('tGenerateBtn');
+  const tFormatToggle = document.getElementById('tFormatToggle');
+  const tFormatLockNote = document.getElementById('tFormatLockNote');
+  const tSkillToggle = document.getElementById('tSkillToggle');
+
+  modeTabs.querySelectorAll('.mode-tab').forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      modeTabs.querySelectorAll('.mode-tab').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      const mode = tab.dataset.mode;
+      const showTournament = mode === 'tournament';
+      setupView.hidden = showTournament;
+      tournamentSetupView.hidden = !showTournament;
+      [scheduleView, standingsView, tGroupsView, tBracketView].forEach(v=>v.hidden = true);
+      endSessionBtn.hidden = true;
+      statsStrip.hidden = true;
+    });
+  });
+
+  function tShowError(msg){ tErrorBox.textContent = msg; tErrorBox.hidden = false; tErrorBox.scrollIntoView({behavior:'smooth', block:'center'}); }
+  function tClearError(){ tErrorBox.hidden = true; }
+
+  function renderTNameInputs(){
+    const count = Math.max(0, parseInt(tPlayerCountEl.value) || 0);
+    while (tPlayerNames.length < count) tPlayerNames.push('Player ' + (tPlayerNames.length+1));
+    tPlayerNames.length = count;
+    tNamesGrid.innerHTML = '';
+    tPlayerNames.forEach((name,i)=>{
+      const wrap = el('div','name-field');
+      wrap.style.flexDirection = 'column';
+      wrap.style.alignItems = 'stretch';
+      const row = el('div');
+      row.style.display='flex'; row.style.alignItems='center'; row.style.gap='8px';
+      const num = el('span','name-num', String(i+1));
+      const input = document.createElement('input');
+      input.type = 'text'; input.value = name;
+      input.addEventListener('input', e=>{ tPlayerNames[i] = e.target.value; });
+      row.appendChild(num); row.appendChild(input);
+      wrap.appendChild(row);
+      if (tFormat === 'mixed'){
+        const g = el('div','gender-toggle');
+        const mBtn = el('div','gender-btn' + (tPlayerGenders[i]!=='F' ? ' active-m' : ''), 'M');
+        const fBtn = el('div','gender-btn' + (tPlayerGenders[i]==='F' ? ' active-f' : ''), 'F');
+        mBtn.addEventListener('click', ()=>{ tPlayerGenders[i]='M'; renderTNameInputs(); });
+        fBtn.addEventListener('click', ()=>{ tPlayerGenders[i]='F'; renderTNameInputs(); });
+        g.appendChild(mBtn); g.appendChild(fBtn);
+        wrap.appendChild(g);
+        if (tPlayerGenders[i] === undefined) tPlayerGenders[i] = i % 2 === 0 ? 'M' : 'F';
+      }
+      tNamesGrid.appendChild(wrap);
+    });
+  }
+  tPlayerCountEl.addEventListener('input', renderTNameInputs);
+  renderTNameInputs();
+
+  document.querySelectorAll('#tSportToggle .format-opt').forEach(opt=>{
+    opt.addEventListener('click', ()=>{
+      document.querySelectorAll('#tSportToggle .format-opt').forEach(o=>o.classList.remove('active'));
+      opt.classList.add('active');
+      tSport = opt.dataset.sport;
+      const cfg = SPORT_DEFAULTS[tSport];
+      tPointsInput.value = cfg.points;
+      const singlesOpt = document.querySelector('#tFormatToggle .format-opt[data-format="singles"]');
+      if (!cfg.allowSingles){
+        singlesOpt.classList.add('disabled'); singlesOpt.classList.remove('active');
+        if (tFormat === 'singles'){ tFormat = 'doubles'; document.querySelector('#tFormatToggle .format-opt[data-format="doubles"]').classList.add('active'); }
+        tFormatLockNote.hidden = false;
+      } else {
+        singlesOpt.classList.remove('disabled');
+        tFormatLockNote.hidden = true;
+      }
+    });
+  });
+
+  document.querySelectorAll('#tFormatToggle .format-opt').forEach(opt=>{
+    opt.addEventListener('click', ()=>{
+      if (opt.classList.contains('disabled')) return;
+      document.querySelectorAll('#tFormatToggle .format-opt').forEach(o=>o.classList.remove('active'));
+      opt.classList.add('active');
+      tFormat = opt.dataset.format;
+      renderTNameInputs();
+    });
+  });
+
+  document.querySelectorAll('#tSkillToggle .format-opt').forEach(opt=>{
+    opt.addEventListener('click', ()=>{
+      document.querySelectorAll('#tSkillToggle .format-opt').forEach(o=>o.classList.remove('active'));
+      opt.classList.add('active');
+      tSkill = opt.dataset.skill;
+    });
+  });
+
+  document.querySelectorAll('#tStageToggle .format-opt').forEach(opt=>{
+    opt.addEventListener('click', ()=>{
+      document.querySelectorAll('#tStageToggle .format-opt').forEach(o=>o.classList.remove('active'));
+      opt.classList.add('active');
+      tStageSize = parseInt(opt.dataset.stage);
+      updateTBracketLine();
+    });
+  });
+
+  function updateTBracketLine(){
+    const groups = parseInt(tGroupsInput.value)||0;
+    const advance = parseInt(tAdvanceInput.value)||0;
+    const qualifiers = groups*advance;
+    const needed = tStageSize === 4 ? 16 : 8;
+    if (qualifiers === needed){
+      tBracketLine.style.color = 'var(--teal)';
+      tBracketLine.textContent = groups + ' groups × ' + advance + ' advancing = ' + qualifiers + ' qualifiers — matches the bracket size perfectly.';
+    } else {
+      tBracketLine.style.color = 'var(--danger)';
+      tBracketLine.textContent = groups + ' groups × ' + advance + ' advancing = ' + qualifiers + ' qualifiers, but this bracket needs exactly ' + needed + '. Adjust groups or top-N to advance.';
+    }
+  }
+  tGroupsInput.addEventListener('input', updateTBracketLine);
+  tAdvanceInput.addEventListener('input', updateTBracketLine);
+  updateTBracketLine();
+
+  /* ---------- competitor / group / match generation ---------- */
+  function buildCompetitors(playerObjs, format){
+    if (format === 'singles'){
+      return playerObjs.map(p=>({id:'c'+p.id, label:null, players:[p.id]}));
+    }
+    if (format === 'doubles'){
+      const shuffled = shuffle(playerObjs.map(p=>p.id));
+      const comps = [];
+      for (let i=0;i<shuffled.length;i+=2) comps.push({id:'c'+i, label:null, players:[shuffled[i], shuffled[i+1]]});
+      return comps;
+    }
+    const males = shuffle(playerObjs.filter(p=>p.gender==='M').map(p=>p.id));
+    const females = shuffle(playerObjs.filter(p=>p.gender==='F').map(p=>p.id));
+    const comps = [];
+    for (let i=0;i<males.length;i++) comps.push({id:'c'+i, label:null, players:[males[i], females[i]]});
+    return comps;
+  }
+
+  function assignToGroups(competitors, groupCount){
+    const shuffled = shuffle(competitors);
+    const groups = Array.from({length:groupCount},()=>[]);
+    shuffled.forEach((c,i)=>{ groups[i%groupCount].push(c); });
+    return groups;
+  }
+
+  function generateGroupMatches(groupCompetitors, groupIdx){
+    const matches = [];
+    for (let i=0;i<groupCompetitors.length;i++){
+      for (let j=i+1;j<groupCompetitors.length;j++){
+        const a = groupCompetitors[i], b = groupCompetitors[j];
+        matches.push({
+          id: 'gm'+(gameCounter++), type:'tournament',
+          teamA: a.players.slice(), teamB: b.players.slice(),
+          players: [...a.players, ...b.players],
+          compA: a.id, compB: b.id, groupIdx,
+          result: null, bonus: false
+        });
+      }
+    }
+    return matches;
+  }
+
+  function competitorLabel(c){
+    return c.label || c.players.map(playerName).join(' & ');
+  }
+
+  function computeGroupStandings(groupMatches, competitors){
+    const stats = {};
+    competitors.forEach(c=>{ stats[c.id] = {id:c.id, name:competitorLabel(c), played:0, won:0, lost:0, pointsFor:0, pointsAgainst:0}; });
+    groupMatches.forEach(g=>{
+      if (!g.result || g.result.skipped) return;
+      stats[g.compA].played++; stats[g.compA].pointsFor += g.result.scoreA; stats[g.compA].pointsAgainst += g.result.scoreB;
+      if (g.result.winner==='A') stats[g.compA].won++; else stats[g.compA].lost++;
+      stats[g.compB].played++; stats[g.compB].pointsFor += g.result.scoreB; stats[g.compB].pointsAgainst += g.result.scoreA;
+      if (g.result.winner==='B') stats[g.compB].won++; else stats[g.compB].lost++;
+    });
+    return Object.values(stats).map(s=>({...s, diff: s.pointsFor - s.pointsAgainst}))
+      .sort((x,y)=> y.pointsFor - x.pointsFor || y.diff - x.diff || y.won - x.won || x.name.localeCompare(y.name));
+  }
+
+  function tGroupComplete(groupIdx){
+    return tGroupMatches[groupIdx].every(g=>g.result);
+  }
+
+  function groupLetter(i){ return String.fromCharCode(65+i); }
+
+  function buildCompetitorStandingsTable(standingsList){
+    const table = document.createElement('table');
+    table.className = 'standings';
+    table.innerHTML = '<thead><tr><th>#</th><th>Competitor</th><th>Played</th><th>W-L</th><th>Pts For</th><th>Pts Against</th><th>Diff</th></tr></thead>';
+    const tbody = document.createElement('tbody');
+    standingsList.forEach((s,i)=>{
+      const tr = document.createElement('tr');
+      tr.className = 'rank-' + Math.min(i+1,3);
+      const diffText = (s.diff>0?'+':'') + s.diff;
+      tr.innerHTML = '<td class="rank-cell">'+(i+1)+'</td><td class="player-name-cell">'+s.name+'</td><td>'+s.played+'</td><td>'+s.won+'-'+s.lost+'</td><td>'+s.pointsFor+'</td><td>'+s.pointsAgainst+'</td><td class="points-cell">'+diffText+'</td>';
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    return table;
+  }
+
+  function renderTGroups(){
+    tGroupsContainer.innerHTML = '';
+    tGroups.forEach((groupComps, gi)=>{
+      const block = el('div','group-block');
+      const complete = tGroupComplete(gi);
+      const header = el('div','group-header');
+      header.innerHTML = '<h3 style="font-size:24px;">Group ' + groupLetter(gi) + '</h3><span class="round-meta">' +
+        tGroupMatches[gi].filter(g=>g.result).length + '/' + tGroupMatches[gi].length + ' matches scored' + (complete ? ' ✓' : '') + '</span>';
+      block.appendChild(header);
+      const body = el('div','group-body');
+      const standings = computeGroupStandings(tGroupMatches[gi], groupComps);
+      body.appendChild(buildCompetitorStandingsTable(standings));
+      const grid = el('div','courts-grid');
+      tGroupMatches[gi].forEach((g,idx)=> grid.appendChild(renderCourtCard(g, idx)));
+      body.appendChild(grid);
+      block.appendChild(body);
+      tGroupsContainer.appendChild(block);
+    });
+    renderTAdvanceFooter();
+  }
+
+  function renderTAdvanceFooter(){
+    tAdvanceFooter.innerHTML = '';
+    const allComplete = tGroups.every((g,gi)=>tGroupComplete(gi));
+    if (!allComplete){
+      tAdvanceFooter.appendChild(el('div','complete-note','Finish scoring every group match to unlock the knockout bracket.'));
+      return;
+    }
+    const btn = el('button','primary-btn','🏆 Advance to Knockouts');
+    btn.addEventListener('click', startBracket);
+    tAdvanceFooter.appendChild(btn);
+  }
+
+  /* refresh helper used by shared renderCourtCard's Save/Skip/Edit handlers while in tournament group view */
+  const _origRefreshView = refreshView;
+  function tRefreshAware(){
+    if (!tGroupsView.hidden) { renderTGroups(); return; }
+    if (!tBracketView.hidden) { renderTBracket(); return; }
+    _origRefreshView();
+  }
+
+  tGenerateBtn.addEventListener('click', ()=>{
+    tClearError();
+    const names = tPlayerNames.map(n=>n.trim());
+    if (names.some(n=>!n)) return tShowError('Please give every player a name.');
+    if (new Set(names.map(n=>n.toLowerCase())).size !== names.length) return tShowError('Player names should be unique.');
+
+    const needsTeams = tFormat !== 'singles';
+    if (needsTeams && names.length % 2 !== 0) return tShowError('Need an even number of players to form ' + (tFormat==='mixed'?'mixed doubles':'doubles') + ' teams.');
+
+    gameCounter = 0;
+    players = names.map((name,i)=>({id:i, name, gender: tPlayerGenders[i]}));
+
+    if (tFormat === 'mixed'){
+      const males = players.filter(p=>p.gender==='M').length;
+      const females = players.filter(p=>p.gender==='F').length;
+      if (males !== females) return tShowError('Mixed doubles needs an equal number of M and F players (currently ' + males + ' M / ' + females + ' F).');
+    }
+
+    const groupsCount = parseInt(tGroupsInput.value) || 1;
+    const advance = parseInt(tAdvanceInput.value) || 1;
+    const needed = tStageSize === 4 ? 16 : 8;
+    if (groupsCount * advance !== needed) return tShowError('Groups × top-N advancing must equal ' + needed + ' for this bracket. Currently ' + (groupsCount*advance) + '.');
+
+    tCompetitors = buildCompetitors(players, tFormat);
+    const minPerGroup = 2;
+    if (Math.floor(tCompetitors.length / groupsCount) < minPerGroup) return tShowError('Too many groups for the number of competitors — each group needs at least 2.');
+    if (advance > Math.floor(tCompetitors.length / groupsCount)) return tShowError('Cannot advance ' + advance + ' from each group — the smallest group only has ' + Math.floor(tCompetitors.length / groupsCount) + ' competitors.');
+
+    courts = parseInt(tCourtsInput.value) || 1;
+    pointsPerMatch = parseInt(tPointsInput.value) || 21;
+    sport = tSport; format = tFormat === 'mixed' ? 'doubles' : tFormat;
+
+    tGroups = assignToGroups(tCompetitors, groupsCount);
+    tGroupMatches = tGroups.map((g,gi)=>generateGroupMatches(g,gi));
+    tAdvancePerGroup = advance;
+
+    refreshView = tRefreshAware;
+
+    setupView.hidden = true; tournamentSetupView.hidden = true;
+    scheduleView.hidden = true; standingsView.hidden = true; tBracketView.hidden = true;
+    tGroupsView.hidden = false;
+    endSessionBtn.hidden = true;
+    statsStrip.hidden = false;
+    const cfg = SPORT_DEFAULTS[tSport];
+    statsStrip.innerHTML = '<span>' + cfg.emoji + ' <b>' + cfg.label + '</b></span><span><b>' + players.length + '</b> players</span>' +
+      '<span><b>' + tCompetitors.length + '</b> competitors</span><span><b>' + tGroups.length + '</b> groups</span>' +
+      '<span>Top <b>' + advance + '</b> advance</span><span>Race to <b>' + pointsPerMatch + '</b></span>';
+    renderTGroups();
+  });
+
+  /* ---------- knockout bracket ---------- */
+  function bracketSeedOrder(n){
+    let order = [1];
+    while (order.length < n){
+      const m = order.length*2 + 1;
+      const next = [];
+      order.forEach(s=>{ next.push(s); next.push(m-s); });
+      order = next;
+    }
+    return order;
+  }
+
+  function roundLabel(roundsRemaining){
+    if (roundsRemaining === 1) return 'Final';
+    if (roundsRemaining === 2) return 'Semifinals';
+    if (roundsRemaining === 3) return 'Quarterfinals';
+    return 'Knockouts';
+  }
+
+  function startBracket(){
+    const qualifiersByRank = []; // [ [rank1 from each group...], [rank2...], ... ]
+    for (let r=0; r<tAdvancePerGroup; r++){
+      tGroups.forEach((groupComps, gi)=>{
+        const standings = computeGroupStandings(tGroupMatches[gi], groupComps);
+        const comp = groupComps.find(c=>c.id===standings[r].id);
+        qualifiersByRank.push({ comp, seedLabel: 'Group ' + groupLetter(gi) + ' #' + (r+1) });
+      });
+    }
+    const n = qualifiersByRank.length;
+    const order = bracketSeedOrder(n);
+    const seeded = order.map(pos => qualifiersByRank[pos-1]);
+
+    const totalRounds = Math.log2(n);
+    const round1 = [];
+    for (let i=0;i<seeded.length;i+=2){
+      const a = seeded[i].comp, b = seeded[i+1].comp;
+      round1.push({
+        id:'b'+(gameCounter++), type:'tournament',
+        teamA:a.players.slice(), teamB:b.players.slice(),
+        players:[...a.players,...b.players],
+        compA:a.id, compB:b.id, compAObj:a, compBObj:b,
+        result:null, bonus:false, isFinal: totalRounds===1
+      });
+    }
+    tBracketRounds = [round1];
+    tCurrentBracketRound = 0;
+
+    tGroupsView.hidden = true;
+    tBracketView.hidden = false;
+    renderTBracket();
+    tBracketView.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  function renderTBracket(){
+    tBracketContainer.innerHTML = '';
+    const totalRounds = Math.log2(tBracketRounds[0].length * 2);
+
+    tBracketRounds.forEach((roundMatches, ri)=>{
+      const roundsRemaining = totalRounds - ri;
+      const block = el('div','bracket-round');
+      block.appendChild(el('h3','', roundLabel(roundsRemaining) + (roundsRemaining>1 ? ' (Round ' + (ri+1) + ')' : '')));
+      const grid = el('div','courts-grid');
+      roundMatches.forEach((g,idx)=> grid.appendChild(renderCourtCard(g, idx)));
+      block.appendChild(grid);
+      tBracketContainer.appendChild(block);
+    });
+
+    const lastRound = tBracketRounds[tBracketRounds.length-1];
+    const lastComplete = lastRound.every(g=>g.result && !g.result.skipped);
+    if (lastComplete){
+      if (lastRound.length === 1){
+        const champMatch = lastRound[0];
+        const champComp = champMatch.result.winner === 'A' ? champMatch.compAObj : champMatch.compBObj;
+        const banner = el('div','champion-banner');
+        banner.innerHTML = '<div class="display">🏆 CHAMPION</div><div class="names">' + competitorLabel(champComp) + '</div>';
+        tBracketContainer.appendChild(banner);
+      } else {
+        const winners = lastRound.map(g=> g.result.winner==='A' ? g.compAObj : g.compBObj);
+        const nextRound = [];
+        for (let i=0;i<winners.length;i+=2){
+          const a=winners[i], b=winners[i+1];
+          const roundsRemainingNext = totalRounds - tBracketRounds.length;
+          nextRound.push({
+            id:'b'+(gameCounter++), type:'tournament',
+            teamA:a.players.slice(), teamB:b.players.slice(),
+            players:[...a.players,...b.players],
+            compA:a.id, compB:b.id, compAObj:a, compBObj:b,
+            result:null, bonus:false, isFinal: roundsRemainingNext===1
+          });
+        }
+        const btn = el('button','primary-btn', 'Advance to ' + roundLabel(totalRounds - tBracketRounds.length));
+        btn.style.display='block'; btn.style.margin='0 auto 24px';
+        btn.addEventListener('click', ()=>{
+          tBracketRounds.push(nextRound);
+          renderTBracket();
+        });
+        tBracketContainer.appendChild(btn);
+      }
+    }
+  }
+
+  /* =========================================================
+     SHARE / LIVE SYNC (Supabase)
+     Anyone with a link can view AND edit — matches an open,
+     no-login "watch or run your own" event board.
+  ========================================================= */
+  const SUPABASE_URL = 'https://aphwbhvqftixozgjifnx.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_E5MBuNRnmIQ93bJCo7Xswg_GCb534s0';
+
+  let currentView = 'mixSetup'; // mixSetup | mixSchedule | mixStandings | tSetup | tGroups | tBracket
+  let activeMode = 'mixmatch';
+  let scheduleId = null;
+  let lastSeenUpdatedAt = null;
+  let persistTimer = null;
+  let applyingRemote = false;
+  let pollTimer = null;
+
+  const shareBanner = document.getElementById('shareBanner');
+  const shareLinkText = document.getElementById('shareLinkText');
+  const shareCopyBtn = document.getElementById('shareCopyBtn');
+  const syncNote = document.getElementById('syncNote');
+
+  function genShortId(){ return Math.random().toString(36).slice(2,10); }
+
+  async function supaFetch(path, opts){
+    opts = opts || {};
+    const headers = Object.assign({
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': 'application/json'
+    }, opts.headers || {});
+    return fetch(SUPABASE_URL + path, Object.assign({}, opts, { headers }));
+  }
+
+  async function supaLoad(id){
+    try {
+      const res = await supaFetch('/rest/v1/schedules?id=eq.' + encodeURIComponent(id) + '&select=data,updated_at');
+      if (!res.ok) return null;
+      const rows = await res.json();
+      return (rows && rows.length) ? rows[0] : null;
+    } catch(e){ return null; }
+  }
+
+  async function supaSave(id, data){
+    try {
+      const res = await supaFetch('/rest/v1/schedules?on_conflict=id', {
+        method: 'POST',
+        headers: { 'Prefer': 'resolution=merge-duplicates,return=minimal' },
+        body: JSON.stringify([{ id, data }])
+      });
+      syncNote.textContent = res.ok ? '' : '⚠ sync failed, will retry';
+      return res.ok;
+    } catch(e){ syncNote.textContent = '⚠ offline — changes saved locally only'; return false; }
+  }
+
+  function updateShareBanner(){
+    if (!scheduleId){ shareBanner.hidden = true; return; }
+    shareBanner.hidden = false;
+    const url = location.origin + location.pathname + '#s=' + scheduleId;
+    shareLinkText.textContent = url;
+    shareCopyBtn.onclick = ()=>{
+      if (navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(url).then(()=>{
+          shareCopyBtn.textContent = 'Copied!';
+          setTimeout(()=>{ shareCopyBtn.textContent = 'Copy Link'; }, 1500);
+        }).catch(()=>{ prompt('Copy this link:', url); });
+      } else {
+        prompt('Copy this link:', url);
+      }
+    };
+  }
+
+  function serializeState(){
+    return {
+      currentView, activeMode,
+      sport, format, courts, minutesPerGame, pointsPerMatch, gameCounter,
+      players, rounds, currentBucketShown, slotsPerSession,
+      finalRound, finalStandingsSnapshot,
+      tSport, tFormat, tSkill, tPlayerNames, tPlayerGenders,
+      tGroups, tGroupMatches, tCompetitors, tStageSize, tAdvancePerGroup,
+      tBracketRounds, tCurrentBracketRound
+    };
+  }
+
+  function persistState(){
+    if (!scheduleId || applyingRemote) return;
+    clearTimeout(persistTimer);
+    syncNote.textContent = 'saving…';
+    persistTimer = setTimeout(async ()=>{
+      const ok = await supaSave(scheduleId, serializeState());
+      if (ok) syncNote.textContent = 'synced ✓';
+    }, 500);
+  }
+
+  function renderTStatsStrip(){
+    const cfg = SPORT_DEFAULTS[tSport];
+    statsStrip.innerHTML = '<span>' + cfg.emoji + ' <b>' + cfg.label + '</b></span><span><b>' + players.length + '</b> players</span>' +
+      '<span><b>' + tCompetitors.length + '</b> competitors</span><span><b>' + tGroups.length + '</b> groups</span>' +
+      '<span>Top <b>' + tAdvancePerGroup + '</b> advance</span><span>Race to <b>' + pointsPerMatch + '</b></span>';
+  }
+
+  function applyState(state){
+    if (!state) return;
+    currentView = state.currentView || 'mixSetup';
+    activeMode = state.activeMode || 'mixmatch';
+    sport = state.sport || sport; format = state.format || format;
+    courts = state.courts || 1; minutesPerGame = state.minutesPerGame || 10;
+    pointsPerMatch = state.pointsPerMatch || 21; gameCounter = state.gameCounter || 0;
+    players = state.players || []; rounds = state.rounds || [];
+    currentBucketShown = state.currentBucketShown || 0; slotsPerSession = state.slotsPerSession || 1;
+    sessionBuckets = chunk(rounds, slotsPerSession);
+    finalRound = state.finalRound || null; finalStandingsSnapshot = state.finalStandingsSnapshot || null;
+
+    tSport = state.tSport || 'badminton'; tFormat = state.tFormat || 'doubles'; tSkill = state.tSkill || 'beginner';
+    tPlayerNames = state.tPlayerNames || tPlayerNames; tPlayerGenders = state.tPlayerGenders || {};
+    tGroups = state.tGroups || []; tGroupMatches = state.tGroupMatches || []; tCompetitors = state.tCompetitors || [];
+    tStageSize = state.tStageSize || 4; tAdvancePerGroup = state.tAdvancePerGroup || 2;
+    tBracketRounds = state.tBracketRounds || []; tCurrentBracketRound = state.tCurrentBracketRound || 0;
+
+    refreshView = (currentView === 'tGroups' || currentView === 'tBracket') ? tRefreshAware : _origRefreshView;
+
+    setupView.hidden = true; tournamentSetupView.hidden = true;
+    scheduleView.hidden = true; standingsView.hidden = true;
+    tGroupsView.hidden = true; tBracketView.hidden = true;
+    endSessionBtn.hidden = true; statsStrip.hidden = true;
+
+    modeTabs.querySelectorAll('.mode-tab').forEach(t=>t.classList.toggle('active', t.dataset.mode === activeMode));
+
+    if (currentView === 'mixSchedule'){
+      scheduleView.hidden = false; endSessionBtn.hidden = false; statsStrip.hidden = false;
+      renderStatsStrip(); renderSchedule();
+    } else if (currentView === 'mixStandings'){
+      endSession();
+    } else if (currentView === 'tGroups'){
+      tGroupsView.hidden = false; statsStrip.hidden = false;
+      renderTStatsStrip(); renderTGroups();
+    } else if (currentView === 'tBracket'){
+      tBracketView.hidden = false; statsStrip.hidden = false;
+      renderTStatsStrip(); renderTBracket();
+    } else if (activeMode === 'tournament'){
+      tournamentSetupView.hidden = false;
+    } else {
+      setupView.hidden = false;
+    }
+    updateShareBanner();
+  }
+
+  function startPolling(){
+    clearInterval(pollTimer);
+    pollTimer = setInterval(async ()=>{
+      if (!scheduleId) return;
+      const row = await supaLoad(scheduleId);
+      if (row && row.updated_at !== lastSeenUpdatedAt){
+        lastSeenUpdatedAt = row.updated_at;
+        applyingRemote = true;
+        applyState(row.data);
+        applyingRemote = false;
+        syncNote.textContent = 'updated ' + new Date().toLocaleTimeString();
+      }
+    }, 4000);
+  }
+
+  function ensureShareLink(){
+    if (scheduleId) return;
+    scheduleId = genShortId();
+    history.replaceState(null, '', location.pathname + location.search + '#s=' + scheduleId);
+    startPolling();
+    updateShareBanner();
+  }
+
+  // Hook persistState() into every screen-changing action.
+  generateBtn.addEventListener('click', ()=>{ if (!scheduleView.hidden){ currentView='mixSchedule'; ensureShareLink(); persistState(); } });
+  tGenerateBtn.addEventListener('click', ()=>{ if (!tGroupsView.hidden){ currentView='tGroups'; ensureShareLink(); persistState(); } });
+
+  (function(){
+    const _renderSchedule = renderSchedule;
+    renderSchedule = function(){ _renderSchedule(); persistState(); };
+    const _endSession = endSession;
+    endSession = function(){ currentView='mixStandings'; _endSession(); persistState(); };
+    const _renderTGroups = renderTGroups;
+    renderTGroups = function(){ _renderTGroups(); persistState(); };
+    const _renderTBracket = renderTBracket;
+    renderTBracket = function(){ _renderTBracket(); persistState(); };
+    const _startBracket = startBracket;
+    startBracket = function(){ currentView='tBracket'; _startBracket(); persistState(); };
+    const _renderFinalSection = renderFinalSection;
+    renderFinalSection = function(){ _renderFinalSection(); persistState(); };
+  })();
+
+  modeTabs.querySelectorAll('.mode-tab').forEach(tab=>{
+    tab.addEventListener('click', ()=>{ activeMode = tab.dataset.mode; currentView = activeMode==='tournament' ? 'tSetup' : 'mixSetup'; });
+  });
+
+  newSessionBtn.addEventListener('click', ()=>{
+    scheduleId = null; lastSeenUpdatedAt = null;
+    clearInterval(pollTimer);
+    history.replaceState(null, '', location.pathname + location.search);
+    currentView = 'mixSetup';
+    updateShareBanner();
+  });
+
+  // On load: if the URL carries a shared schedule id, load and start following it.
+  (async function bootFromHash(){
+    const m = location.hash.match(/[#&]s=([a-z0-9]+)/i);
+    if (!m) return;
+    scheduleId = m[1];
+    syncNote.textContent = 'loading shared schedule…';
+    const row = await supaLoad(scheduleId);
+    if (row && row.data){
+      lastSeenUpdatedAt = row.updated_at;
+      applyState(row.data);
+      startPolling();
+    } else {
+      syncNote.textContent = '';
+      scheduleId = null;
+      alert("Couldn't find that shared schedule — it may have expired or the link is incomplete. Showing a fresh setup instead.");
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+  })();
+
+})();
+</script>
+</body>
+</html>
